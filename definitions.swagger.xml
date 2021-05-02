@@ -1,0 +1,707 @@
+swagger: "2.0"
+info:
+  description: "UP. Arquitectura Web. Enriquez Gonzalo. Gestión de solicitud de turnos para cualquier servicio."
+  version: "1.0.0"
+  title: "Gestión de turnos"
+host: "api.eg.apt.com"
+basePath: "/v1"
+tags:
+- name: "appointment"
+  description: "Operaciones sobre los turnos"
+- name: "calendar"
+  description: "Operaciones sobre el calendario"
+- name: "activity"
+  description: "Operaciones sobre las actividades"
+- name: "user"
+  description: "Operaciones sobre los usuarios"
+schemes:
+- "http"
+paths:
+  /appointment:
+    get:
+      tags:
+      - "appointment"
+      summary: "Devuelve los turnos existentes"
+      description: ""
+      operationId: "appointmentGet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Appointment"
+            xml:
+              name: "AppointmentList"      
+        "500":
+          description: "Error en el servidor"  
+    post:
+      tags:
+      - "appointment"
+      summary: "Agrega un nuevo turno"
+      description: ""
+      operationId: "appointmentAdd"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto turno para agregar"
+        required: true
+        schema:
+          $ref: "#/definitions/Appointment"
+      responses:
+        "201":
+          description: "Objeto agregado"
+        "400":
+          description: "Request inválido"
+        "500":
+          description: "Error en el servidor"          
+  /appointment/{appointmentId}:
+    get:
+      tags:
+      - "appointment"
+      summary: "Devuelve un turno mediante su ID"
+      description: ""
+      operationId: "appointmentGetById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "appointmentId"
+        in: "path"
+        description: "ID del turno"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            $ref: "#/definitions/Appointment"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Turno no encontrado"
+        "500":
+          description: "Error en el servidor"
+    delete:
+      tags:
+      - "appointment"
+      summary: "Elimina un turno mediante su ID"
+      description: ""
+      operationId: "appointmentDeleteById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "appointmentId"
+        in: "path"
+        description: "ID del turno"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Turno no encontrado"
+        "500":
+          description: "Error en el servidor"
+  /calendar:
+    get:
+      tags:
+      - "calendar"
+      summary: "Devuelve el calendario semanal de actividades"
+      description: ""
+      operationId: "calendarGet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Calendar"
+            xml:
+              name: "CalendarList"            
+        "500":
+          description: "Error en el servidor"  
+    post:
+      tags:
+      - "calendar"
+      summary: "Agrega un espacio al calendario"
+      description: ""
+      operationId: "calendarAdd"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto calendar para agregar"
+        required: true
+        schema:
+          $ref: "#/definitions/Calendar"
+      responses:
+        "201":
+          description: "Objeto agregado"
+        "400":
+          description: "Request inválido"
+        "500":
+          description: "Error en el servidor"          
+    put:
+      tags:
+      - "calendar"
+      summary: "Actualiza uno o varios espacios del calendario"
+      description: ""
+      operationId: "calendarUpdate"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Lista de objetos calendar para modificar"
+        required: true
+        schema:
+          type: "array"
+          items:
+              $ref: "#/definitions/Calendar"
+          xml:
+            name: "CalendarList"              
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Calendar no encontrado"
+        "500":
+          description: "Error en el servidor"
+  /calendar/{calendarId}:
+    get:
+      tags:
+      - "calendar"
+      summary: "Devuelve un espacio del calendario mediante su ID"
+      description: ""
+      operationId: "calendarGetById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "calendarId"
+        in: "path"
+        description: "ID del calendar"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            $ref: "#/definitions/Calendar"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Calendar no encontrado"
+        "500":
+          description: "Error en el servidor"
+    delete:
+      tags:
+      - "calendar"
+      summary: "Elimina un espacio del calendario mediante su ID"
+      description: ""
+      operationId: "calendarDeleteById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "calendarId"
+        in: "path"
+        description: "ID del calendar"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Calendar no encontrado"
+        "500":
+          description: "Error en el servidor"          
+  /activity:
+    get:
+      tags:
+      - "activity"
+      summary: "Devuelve las actividades existentes"
+      description: ""
+      operationId: "activityGet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Activity"
+            xml:
+              name: "ActivityList"              
+        "500":
+          description: "Error en el servidor"  
+    post:
+      tags:
+      - "activity"
+      summary: "Agrega una nueva actividad"
+      description: ""
+      operationId: "activityAdd"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto actividad para agregar"
+        required: true
+        schema:
+          $ref: "#/definitions/Activity"
+      responses:
+        "201":
+          description: "Objeto agregado"
+        "400":
+          description: "Request inválido"
+        "500":
+          description: "Error en el servidor"          
+    put:
+      tags:
+      - "activity"
+      summary: "Actualiza una actividad existente"
+      description: ""
+      operationId: "activityUpdate"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto actividad para modificar"
+        required: true
+        schema:
+          $ref: "#/definitions/Activity"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Actividad no encontrada"
+        "500":
+          description: "Error en el servidor"
+  /activity/{activityId}:
+    get:
+      tags:
+      - "activity"
+      summary: "Devuelve una actividad mediante su ID"
+      description: ""
+      operationId: "activityGetById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "activityId"
+        in: "path"
+        description: "ID de la actividad"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            $ref: "#/definitions/Activity"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Actividad no encontrada"
+        "500":
+          description: "Error en el servidor"
+    delete:
+      tags:
+      - "activity"
+      summary: "Elimina una actividad mediante su ID"
+      description: ""
+      operationId: "activityDeleteById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "activityId"
+        in: "path"
+        description: "ID de la actividad"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Actividad no encontrada"
+        "500":
+          description: "Error en el servidor"          
+  /activity/{activityId}/calendar:
+    get:
+      tags:
+      - "activity"
+      summary: "Devuelve el calendario semanal de la actividad"
+      description: ""
+      operationId: "activityCalendarGet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "activityId"
+        in: "path"
+        description: "ID de la actividad"
+        required: true
+        type: "integer"
+        format: "int64"      
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Calendar"
+            xml:
+              name: "CalendarList"              
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Actividad no encontrada"            
+        "500":
+          description: "Error en el servidor"
+    delete:
+      tags:
+      - "activity"
+      summary: "Elimina el calendario semanal de la actividad"
+      description: ""
+      operationId: "activityCalendarDelete"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "activityId"
+        in: "path"
+        description: "ID de la actividad"
+        required: true
+        type: "integer"
+        format: "int64"      
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Actividad no encontrada"          
+        "500":
+          description: "Error en el servidor"                    
+  /user:
+    get:
+      tags:
+      - "user"
+      summary: "Devuelve los usuarios existentes"
+      description: ""
+      operationId: "userGet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+            xml:
+              name: "UserList"       
+        "500":
+          description: "Error en el servidor"  
+    post:
+      tags:
+      - "user"
+      summary: "Agrega un nuevo usuario"
+      description: ""
+      operationId: "userAdd"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto usuario para agregar"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "201":
+          description: "Objeto agregado"
+        "400":
+          description: "Request inválido"
+        "500":
+          description: "Error en el servidor"          
+    put:
+      tags:
+      - "user"
+      summary: "Actualiza un usuario existente"
+      description: ""
+      operationId: "userUpdate"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto usuario para modificar"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Usuario no encontrado"
+        "500":
+          description: "Error en el servidor"
+  /user/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Devuelve un usuario mediante su username"
+      description: ""
+      operationId: "userGetByUsername"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "Identificador del usuario"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Usuario no encontrado"
+        "500":
+          description: "Error en el servidor"
+    delete:
+      tags:
+      - "user"
+      summary: "Elimina un usuario mediante su username"
+      description: ""
+      operationId: "userDeleteByUsername"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "Identificador del usuario"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Usuario no encontrado"
+        "500":
+          description: "Error en el servidor"          
+  /user/{username}/appointment:
+    get:
+      tags:
+      - "user"
+      summary: "Devuelve los turnos existentes para el usuario"
+      description: ""
+      operationId: "userAppointmentGet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "Identificador del usuario"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Operación exitosa"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Appointment"
+            xml:
+              name: "AppointmentList"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Usuario no encontrado"
+        "500":
+          description: "Error en el servidor"
+    delete:
+      tags:
+      - "user"
+      summary: "Elimina los turnos existentes para el usuario"
+      description: ""
+      operationId: "userAppointmentDelete"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "Identificador del usuario"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Operación exitosa"
+        "400":
+          description: "Request inválido"
+        "404":
+          description: "Usuario no encontrado"
+        "500":
+          description: "Error en el servidor"                    
+definitions:
+  User:
+    type: "object"
+    required:
+    - "username"
+    - "firstName"
+    - "lastName"    
+    - "email"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "string"
+    xml:
+      name: "User"      
+  Activity:
+    type: "object"
+    required:
+    - "name"
+    - "description"
+    - "owner"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      owner:
+        type: "string"
+    xml:
+      name: "Activity"      
+  Calendar:
+    type: "object"
+    required:
+    - "date"
+    - "activity"
+    - "place"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      date:
+        type: "string"
+        format: "date-time"
+      activity:
+        $ref: "#/definitions/Activity"
+      place:
+        type: "string"        
+      capacity:
+        type: "integer"
+        format: "int64"
+      available:
+        type: "integer"
+        format: "int64"  
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/User"
+    xml:
+      name: "Calendar"      
+  Appointment:
+    type: "object"
+    required:
+    - "calendarId"
+    - "username"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      dateRequest:
+        type: "string"
+        format: "date-time"
+      calendarId:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+    xml:
+      name: "Appointment"
